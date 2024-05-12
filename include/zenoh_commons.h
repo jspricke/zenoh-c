@@ -331,14 +331,14 @@ typedef struct z_owned_closure_zid_t {
   void (*call)(const struct z_id_t*, void*);
   void (*drop)(void*);
 } z_owned_closure_zid_t;
-typedef struct ALIGN(8) z_owned_condvar_t {
-  uint8_t _0[24];
+typedef struct ALIGN(4) z_owned_condvar_t {
+  uint8_t _0[8];
 } z_owned_condvar_t;
-typedef struct ALIGN(8) z_loaned_condvar_t {
-  uint8_t _0[16];
+typedef struct ALIGN(4) z_loaned_condvar_t {
+  uint8_t _0[4];
 } z_loaned_condvar_t;
 typedef struct ALIGN(8) z_loaned_mutex_t {
-  uint8_t _0[32];
+  uint8_t _0[24];
 } z_loaned_mutex_t;
 /**
  * An owned zenoh configuration.
@@ -518,7 +518,7 @@ typedef struct ALIGN(8) z_timestamp_t {
   uint8_t _0[24];
 } z_timestamp_t;
 typedef struct ALIGN(8) z_owned_mutex_t {
-  uint8_t _0[32];
+  uint8_t _0[24];
 } z_owned_mutex_t;
 typedef struct ALIGN(8) z_loaned_publisher_t {
   uint8_t _0[56];

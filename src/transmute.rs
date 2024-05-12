@@ -12,18 +12,18 @@
 //   ZettaScale Zenoh team, <zenoh@zettascale.tech>
 //
 
-// pub fn as_static_ref<'a, T: 'a>(value: &'a T) -> &'static T {
+// pub(crate) fn as_static_ref<'a, T: 'a>(value: &'a T) -> &'static T {
 //     unsafe { std::mem::transmute::<&'a T, &'static T>(value) }
 // }
 
 use std::mem::MaybeUninit;
 
-pub fn unwrap_ref_unchecked<T>(value: &Option<T>) -> &T {
+pub(crate) fn unwrap_ref_unchecked<T>(value: &Option<T>) -> &T {
     debug_assert!(value.is_some());
     unsafe { value.as_ref().unwrap_unchecked() }
 }
 
-pub fn unwrap_ref_unchecked_mut<T>(value: &mut Option<T>) -> &mut T {
+pub(crate) fn unwrap_ref_unchecked_mut<T>(value: &mut Option<T>) -> &mut T {
     debug_assert!(value.is_some());
     unsafe { value.as_mut().unwrap_unchecked() }
 }

@@ -26,20 +26,20 @@ use crate::transmute::{
     TransmuteIntoHandle, TransmuteRef, TransmuteUninitPtr,
 };
 
-pub struct CSlice(*const u8, isize);
+pub(crate) struct CSlice(*const u8, isize);
 
 impl CSlice {
-    pub fn new_borrowed(data: *const u8, len: usize) -> Self {
+    pub(crate) fn new_borrowed(data: *const u8, len: usize) -> Self {
         let len: isize = len as isize;
         CSlice(data, -len)
     }
 
-    pub fn new_borrowed_from_slice(slice: &[u8]) -> Self {
+    pub(crate) fn new_borrowed_from_slice(slice: &[u8]) -> Self {
         Self::new_borrowed(slice.as_ptr(), slice.len())
     }
 
     #[allow(clippy::missing_safety_doc)]
-    pub unsafe fn new_owned(data: *const u8, len: usize) -> Self {
+    pub(crate) unsafe fn new_owned(data: *const u8, len: usize) -> Self {
         if len == 0 {
             return CSlice::default();
         }
@@ -48,30 +48,30 @@ impl CSlice {
         CSlice(slice.as_ptr(), slice.len() as isize)
     }
 
-    pub fn slice(&self) -> &'static [u8] {
+    pub(crate) fn slice(&self) -> &'static [u8] {
         if self.1 == 0 {
             return &[0u8; 0];
         }
         unsafe { from_raw_parts(self.0, self.1.unsigned_abs()) }
     }
 
-    pub fn data(&self) -> *const u8 {
+    pub(crate) fn data(&self) -> *const u8 {
         self.0
     }
 
-    pub fn len(&self) -> usize {
+    pub(crate) fn len(&self) -> usize {
         self.1.unsigned_abs()
     }
 
-    pub fn is_empty(&self) -> bool {
+    pub(crate) fn is_empty(&self) -> bool {
         self.1 == 0
     }
 
-    pub fn is_owned(&self) -> bool {
+    pub(crate) fn is_owned(&self) -> bool {
         self.1 > 0
     }
 
-    pub fn shallow_copy(&self) -> Self {
+    pub(crate) fn shallow_copy(&self) -> Self {
         Self(self.0, self.1)
     }
 }
@@ -119,9 +119,9 @@ impl From<Vec<u8>> for CSlice {
 
 impl std::cmp::Eq for CSlice {}
 
-pub use crate::opaque_types::z_loaned_slice_t;
-pub use crate::opaque_types::z_owned_slice_t;
-pub use crate::opaque_types::z_view_slice_t;
+pub(crate) use crate::opaque_types::z_loaned_slice_t;
+pub(crate) use crate::opaque_types::z_owned_slice_t;
+pub(crate) use crate::opaque_types::z_view_slice_t;
 
 decl_transmute_owned!(CSlice, z_owned_slice_t);
 decl_transmute_owned!(custom_inplace_init CSlice, z_view_slice_t);
